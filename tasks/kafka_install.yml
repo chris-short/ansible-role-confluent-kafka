@@ -1,0 +1,36 @@
+---
+- name: Add Confluent Repo Key
+  rpm_key:
+    key: "{{ confluent_repo_key }}"
+    state: present
+    validate_certs: yes
+
+- name: Add Confluent Repo
+  template:
+    src: confluent.repo.j2
+    dest: /etc/yum.repos.d/confluent.repo
+    mode: 0644
+    owner: root
+    group: root
+
+- name: Install Confluent Open Source
+  yum:
+    name: "{{ confluent_pkg_name }}"
+    state: present
+    update_cache: yes
+
+- name: Modify Kafka systemd Unit File
+  template:
+    src: confluent-kafka.service.j2
+    dest: /usr/lib/systemd/system/confluent-kafka.service
+    mode: 0644
+    owner: root
+    group: root
+
+- name: Confluent Service Management
+  systemd:
+    name: "{{ item }}"
+    daemon_reload: yes
+    enabled: yes
+    state: started
+  loop: "{{ confluent_services }}"

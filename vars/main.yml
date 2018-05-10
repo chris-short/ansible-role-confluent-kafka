@@ -1,0 +1,13 @@
+---
+confluent_repo_key: https://packages.confluent.io/rpm/4.1/archive.key
+confluent_pkg_name: confluent-platform-oss-2.11
+confluent_services:
+  - confluent-zookeeper.service
+  - confluent-kafka.service
+  - confluent-schema-registry.service
+  - confluent-kafka-rest.service
+  - confluent-kafka-connect.service
+  - confluent-ksql.service
+
+kafka_heap_size: "{{ ((ansible_memory_mb.real.total | int) * (0.50)) | round | int }}"
+kafka_heap_opts: "-Xmx{{ kafka_heap_size }}m -Xms{{ kafka_heap_size }}m"

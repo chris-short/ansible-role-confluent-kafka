@@ -1,0 +1,4 @@
+---
+- include: kafka_install.yml
+
+- include: kafka_topics.yml

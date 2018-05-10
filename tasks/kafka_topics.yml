@@ -1,0 +1,7 @@
+---
+- name: Create Kafka Topics
+  shell: >
+    /bin/kafka-topics --create --zookeeper localhost:{{ zookeeper_port }} 
+    --topic {{ item.key }} --partitions {{ item.value.partitions }} --if-not-exists 
+    --replication-factor {{ item.value.replication_factor }};
+  with_dict: "{{ kafka_topics }}"
